@@ -2,41 +2,60 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Definition of the design system. All colors, gradients, fonts, etc should be defined here. 
-All colors MUST be HSL.
-*/
+/* Healthcare Management App Design System - Dark Theme */
 
 @layer base {
   :root {
-    --background: 0 0% 100%;
-    --foreground: 222.2 84% 4.9%;
+    /* Dark Healthcare Theme */
+    --background: 222 47% 5%;
+    --foreground: 210 40% 95%;
 
-    --card: 0 0% 100%;
-    --card-foreground: 222.2 84% 4.9%;
+    --card: 222 47% 8%;
+    --card-foreground: 210 40% 95%;
 
-    --popover: 0 0% 100%;
-    --popover-foreground: 222.2 84% 4.9%;
+    --popover: 222 47% 8%;
+    --popover-foreground: 210 40% 95%;
 
-    --primary: 222.2 47.4% 11.2%;
-    --primary-foreground: 210 40% 98%;
+    --primary: 193 95% 55%;
+    --primary-foreground: 222 47% 5%;
 
-    --secondary: 210 40% 96.1%;
-    --secondary-foreground: 222.2 47.4% 11.2%;
+    --secondary: 222 47% 12%;
+    --secondary-foreground: 210 40% 95%;
 
-    --muted: 210 40% 96.1%;
-    --muted-foreground: 215.4 16.3% 46.9%;
+    --muted: 222 47% 12%;
+    --muted-foreground: 215 20% 65%;
 
-    --accent: 210 40% 96.1%;
-    --accent-foreground: 222.2 47.4% 11.2%;
+    --accent: 193 95% 55%;
+    --accent-foreground: 222 47% 5%;
 
-    --destructive: 0 84.2% 60.2%;
+    --destructive: 0 84% 60%;
     --destructive-foreground: 210 40% 98%;
 
-    --border: 214.3 31.8% 91.4%;
-    --input: 214.3 31.8% 91.4%;
-    --ring: 222.2 84% 4.9%;
+    --border: 222 47% 15%;
+    --input: 222 47% 12%;
+    --ring: 193 95% 55%;
 
-    --radius: 0.5rem;
+    --radius: 0.75rem;
+
+    /* Healthcare Specific Colors */
+    --medical-primary: 193 95% 55%;
+    --medical-secondary: 168 76% 42%;
+    --vital-healthy: 142 76% 36%;
+    --vital-warning: 43 96% 56%;
+    --vital-critical: 0 84% 60%;
+    
+    /* Gradients */
+    --gradient-medical: linear-gradient(135deg, hsl(193 95% 55%), hsl(168 76% 42%));
+    --gradient-vitals: linear-gradient(135deg, hsl(193 95% 55% / 0.1), hsl(168 76% 42% / 0.1));
+    --gradient-hero: linear-gradient(135deg, hsl(222 47% 8%), hsl(222 47% 12%));
+    
+    /* Shadows */
+    --shadow-medical: 0 10px 25px -5px hsl(193 95% 55% / 0.1);
+    --shadow-glow: 0 0 20px hsl(193 95% 55% / 0.3);
+    
+    /* Animations */
+    --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    --transition-bounce: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
 
     --sidebar-background: 0 0% 98%;
 
@@ -101,5 +120,62 @@ All colors MUST be HSL.
 
   body {
     @apply bg-background text-foreground;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
   }
+}
+
+@layer components {
+  /* Medical Card Variants */
+  .medical-card {
+    @apply bg-card border border-border rounded-lg p-6 shadow-lg hover:shadow-xl transition-all duration-300;
+    background: var(--gradient-hero);
+    box-shadow: var(--shadow-medical);
+  }
+
+  .vital-card {
+    @apply medical-card relative overflow-hidden;
+    background: var(--gradient-vitals);
+    backdrop-filter: blur(10px);
+  }
+
+  .vital-card::before {
+    content: '';
+    @apply absolute inset-0 opacity-0 transition-opacity duration-300;
+    background: var(--gradient-medical);
+  }
+
+  .vital-card:hover::before {
+    @apply opacity-10;
+  }
+
+  /* Pulse Animation for Vitals */
+  .pulse-vital {
+    animation: pulse-glow 2s ease-in-out infinite;
+  }
+
+  @keyframes pulse-glow {
+    0%, 100% { 
+      box-shadow: 0 0 5px hsl(var(--medical-primary) / 0.3);
+    }
+    50% { 
+      box-shadow: 0 0 20px hsl(var(--medical-primary) / 0.6);
+    }
+  }
+
+  /* Medical Button Variants */
+  .btn-medical {
+    @apply bg-primary text-primary-foreground hover:bg-primary/90 px-6 py-3 rounded-lg font-medium transition-all duration-300;
+    background: var(--gradient-medical);
+    box-shadow: var(--shadow-medical);
+  }
+
+  .btn-medical:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-glow);
+  }
+
+  /* Status Indicators */
+  .status-healthy { @apply text-green-400 bg-green-400/10 border-green-400/20; }
+  .status-warning { @apply text-yellow-400 bg-yellow-400/10 border-yellow-400/20; }
+  .status-critical { @apply text-red-400 bg-red-400/10 border-red-400/20; }
 }
